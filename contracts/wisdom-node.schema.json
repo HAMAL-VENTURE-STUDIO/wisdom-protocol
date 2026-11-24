@@ -428,7 +428,8 @@
         },
         "qualification": {
           "type": "string",
-          "description": "How the claim must be limited when only partly supported."
+          "description": "How the claim must be limited when only partly supported.",
+          "pattern": "\\S"
         },
         "human_reviewed": {
           "type": "boolean"

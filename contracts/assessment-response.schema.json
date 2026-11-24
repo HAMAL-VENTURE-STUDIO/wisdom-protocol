@@ -5,22 +5,66 @@
   "description": "APPLICABILITY layer. Returned on every `assess` call: does a mentor's lesson fit this agent's situation? Decided per query and never written back onto the WisdomNode. The agent receives a verdict and the rules that triggered it, not the node's full text.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["response_id", "schema_version", "verdict", "abstained", "attribution", "escalation", "presents_only_grounded_content"],
+  "required": [
+    "response_id",
+    "schema_version",
+    "verdict",
+    "abstained",
+    "attribution",
+    "escalation",
+    "presents_only_grounded_content"
+  ],
   "properties": {
-    "response_id": { "type": "string", "minLength": 1 },
-    "schema_version": { "const": "0.4" },
+    "response_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "const": "0.4"
+    },
     "verdict": {
-      "enum": ["applies", "partly_applies", "does_not_apply"],
+      "enum": [
+        "applies",
+        "partly_applies",
+        "does_not_apply"
+      ],
       "description": "Fit of the lesson to the situation described by the agent."
     },
-    "abstained": { "type": "boolean", "description": "True when the system gives no advice because the lesson does not fit." },
-    "rationale": { "type": "string", "description": "Why the verdict was reached, in terms of the node's context and boundaries." },
-    "rules_triggered": { "type": "array", "items": { "type": "string" } },
-    "red_flags": { "type": "array", "items": { "type": "string" } },
-    "next_steps": { "type": "array", "items": { "type": "string" } },
+    "abstained": {
+      "type": "boolean",
+      "description": "True when the system gives no advice because the lesson does not fit."
+    },
+    "rationale": {
+      "type": "string",
+      "description": "Why the verdict was reached, in terms of the node's context and boundaries."
+    },
+    "rules_triggered": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      }
+    },
+    "red_flags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      }
+    },
+    "next_steps": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      }
+    },
     "limits": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      },
       "description": "Which parts of the situation the lesson does not cover, and qualifications carried over from partly supported claims."
     },
     "attribution": {
@@ -29,28 +73,62 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["address", "version", "mentor_id"],
+        "required": [
+          "address",
+          "version",
+          "mentor_id"
+        ],
         "properties": {
-          "address": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*/[0-9]+(\\.[0-9]+){1,2}$" },
-          "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
-          "mentor_id": { "type": "string", "minLength": 1 },
-          "display_name": { "type": ["string", "null"] }
+          "address": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*/[0-9]+(\\.[0-9]+){1,2}$"
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+          },
+          "mentor_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "display_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
         }
       }
     },
     "conflicting_views": {
       "type": "array",
       "description": "Other mentors' nodes that disagree. Shown alongside, never averaged into the verdict.",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "escalation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["recommended", "auto_contact"],
+      "required": [
+        "recommended",
+        "auto_contact"
+      ],
       "properties": {
-        "recommended": { "type": "boolean" },
-        "to": { "enum": ["mentor", "licensed_professional", "human_reviewer"] },
-        "reason": { "type": "string" },
+        "recommended": {
+          "type": "boolean"
+        },
+        "to": {
+          "enum": [
+            "mentor",
+            "licensed_professional",
+            "human_reviewer"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "pattern": "\\S"
+        },
         "auto_contact": {
           "const": false,
           "description": "The system never books or contacts a human on its own. A human or authorized agent must act on the recommendation."
@@ -65,32 +143,86 @@
   "allOf": [
     {
       "description": "When the lesson does not fit: abstain, give no advice, and recommend escalation.",
-      "if": { "properties": { "verdict": { "const": "does_not_apply" } } },
+      "if": {
+        "properties": {
+          "verdict": {
+            "const": "does_not_apply"
+          }
+        }
+      },
       "then": {
         "properties": {
-          "abstained": { "const": true },
-          "rules_triggered": { "maxItems": 0 },
-          "next_steps": { "maxItems": 0 },
-          "escalation": { "required": ["to", "reason"], "properties": { "recommended": { "const": true } } }
+          "abstained": {
+            "const": true
+          },
+          "rules_triggered": {
+            "maxItems": 0
+          },
+          "next_steps": {
+            "maxItems": 0
+          },
+          "escalation": {
+            "required": [
+              "to",
+              "reason"
+            ],
+            "properties": {
+              "recommended": {
+                "const": true
+              }
+            }
+          }
         }
       }
     },
     {
       "description": "When the lesson fits fully or partly: do not abstain, and credit at least one node.",
-      "if": { "properties": { "verdict": { "enum": ["applies", "partly_applies"] } } },
-      "then": {
-        "required": ["rules_triggered"],
+      "if": {
         "properties": {
-          "abstained": { "const": false },
-          "attribution": { "minItems": 1 },
-          "rules_triggered": { "minItems": 1 }
+          "verdict": {
+            "enum": [
+              "applies",
+              "partly_applies"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "rules_triggered"
+        ],
+        "properties": {
+          "abstained": {
+            "const": false
+          },
+          "attribution": {
+            "minItems": 1
+          },
+          "rules_triggered": {
+            "minItems": 1
+          }
         }
       }
     },
     {
       "description": "A partial fit must say what is not covered.",
-      "if": { "properties": { "verdict": { "const": "partly_applies" } } },
-      "then": { "required": ["limits"], "properties": { "limits": { "minItems": 1 } } }
+      "if": {
+        "properties": {
+          "verdict": {
+            "const": "partly_applies"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "limits"
+        ],
+        "properties": {
+          "limits": {
+            "minItems": 1
+          }
+        }
+      }
     }
   ]
 }

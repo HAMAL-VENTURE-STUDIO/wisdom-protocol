@@ -10,7 +10,7 @@ Separates three layers of trust: approval (mentor), grounding (evidence) and app
 - Unsupported claims must be marked as returned to the mentor.
 - Removed `provenance.source_location` so transcript offsets never appear in public records.
 - Added `contracts/assessment-response.schema.json` for the applicability verdict: abstain on `does_not_apply`, recommendation-only escalation, required attribution and limits.
-- Tests reorganized per contract; 31 checks (5 valid, 26 invalid, one rule each).
+- Tests reorganized per contract; 34 checks (5 valid, 29 invalid, one rule each); required text fields must be non-blank.
 
 ## v0.3 — 2026-11-23 (proposed)
 
