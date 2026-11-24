@@ -1,0 +1,23 @@
+{
+  "response_id": "synthetic-r3",
+  "schema_version": "0.4",
+  "verdict": "does_not_apply",
+  "abstained": true,
+  "rationale": "SYNTHETIC: the agent describes irrigated land, which the node's boundaries exclude.",
+  "rules_triggered": [],
+  "next_steps": [],
+  "attribution": [
+    {
+      "address": "example-farmer/1.10.1",
+      "version": "0.2.0",
+      "mentor_id": "synthetic-mentor-001"
+    }
+  ],
+  "escalation": {
+    "recommended": true,
+    "to": "mentor",
+    "reason": "Situation outside the node's stated boundaries.",
+    "auto_contact": true
+  },
+  "presents_only_grounded_content": true
+}
