@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.4 — 2026-11-24 (proposed)
+
+Separates three layers of trust: approval (mentor), grounding (evidence) and applicability (per query). See `docs/TRUST-LAYERS.md`.
+
+- Added `verification` to the WisdomNode: atomic claims, each with an opaque `evidence_ref` and a status (supported, partially supported, unsupported, unchecked). Now required.
+- Replaced `example.firsthand` (boolean) with `example.firsthand_evidence`: `stated_by_mentor`, `corroborated`, `unverified`, `not_firsthand`.
+- Release gate: published or agent-retrievable nodes must be fully grounded; partly supported claims need a qualification and human review.
+- Unsupported claims must be marked as returned to the mentor.
+- Removed `provenance.source_location` so transcript offsets never appear in public records.
+- Added `contracts/assessment-response.schema.json` for the applicability verdict: abstain on `does_not_apply`, recommendation-only escalation, required attribution and limits.
+- Tests reorganized per contract; 31 checks (5 valid, 26 invalid, one rule each).
+
 ## v0.3 — 2026-11-23 (proposed)
 
 Changes from the v0.2 candidate schema:

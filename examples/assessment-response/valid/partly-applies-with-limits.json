@@ -1,0 +1,33 @@
+{
+  "response_id": "synthetic-r2",
+  "schema_version": "0.4",
+  "verdict": "partly_applies",
+  "abstained": false,
+  "rationale": "SYNTHETIC: rain-fed small plot after a dry season matches the node's context.",
+  "rules_triggered": [
+    "Split planting across at least two crops with different water needs."
+  ],
+  "red_flags": [
+    "Single-crop plan after drought"
+  ],
+  "next_steps": [
+    "Choose a second, drought-tolerant crop."
+  ],
+  "attribution": [
+    {
+      "address": "example-farmer/1.10.1",
+      "version": "0.2.0",
+      "mentor_id": "synthetic-mentor-001",
+      "display_name": null
+    }
+  ],
+  "escalation": {
+    "recommended": false,
+    "auto_contact": false
+  },
+  "presents_only_grounded_content": true,
+  "limits": [
+    "Reserve size is one farmer's own threshold, not a general rule.",
+    "Node does not cover irrigated land."
+  ]
+}

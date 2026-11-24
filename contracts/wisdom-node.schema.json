@@ -1,63 +1,141 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/HAMAL-VENTURE-STUDIO/wisdom-protocol/blob/main/contracts/wisdom-node.schema.json",
-  "title": "WisdomNode v0.3 (proposed, unapproved)",
-  "description": "One idea from one mentor (Legacy Leaver), with its decision rules, limits, context, provenance, consent and approval. Proposed design; not yet approved by the founder.",
+  "title": "WisdomNode v0.4 (proposed, unapproved)",
+  "description": "One idea from one mentor (Legacy Leaver). Three separate trust layers: APPROVAL (mentor: does this represent me?), GROUNDING (system + human reviewer: does the source support each claim?), and APPLICABILITY (decided per query, in assessment-response.schema.json, never stored here). None of these certifies a lesson as universally true. Proposed design.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "address", "version", "mentor", "claim", "decision_rules", "boundaries", "provenance", "consent", "approval", "publication_status"],
+  "required": [
+    "id",
+    "address",
+    "version",
+    "mentor",
+    "claim",
+    "decision_rules",
+    "boundaries",
+    "provenance",
+    "consent",
+    "approval",
+    "publication_status",
+    "verification"
+  ],
   "properties": {
-    "id": { "type": "string", "minLength": 1, "description": "Opaque, permanent identifier." },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque, permanent identifier."
+    },
     "address": {
       "type": "string",
       "pattern": "^[a-z0-9][a-z0-9-]*/[0-9]+(\\.[0-9]+){1,2}$",
       "description": "Permanent address leaver/domain.lens[.sub], e.g. major/4.10.2. Never changes once published."
     },
-    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
     "mentor": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["mentor_id"],
+      "required": [
+        "mentor_id"
+      ],
       "properties": {
-        "mentor_id": { "type": "string", "minLength": 1, "description": "Opaque ID. Real names live outside public records." },
-        "display_name": { "type": ["string", "null"], "description": "Only when consent.name_likeness is granted." }
+        "mentor_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Opaque ID. Real names live outside public records."
+        },
+        "display_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Only when consent.name_likeness is granted."
+        }
       }
     },
-    "claim": { "type": "string", "minLength": 1, "description": "The idea in one sentence, in the mentor's words." },
+    "claim": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The idea in one sentence, in the mentor's words."
+    },
     "decision_rules": {
       "type": "array",
       "minItems": 1,
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["rule"],
+        "required": [
+          "rule"
+        ],
         "properties": {
-          "rule": { "type": "string", "minLength": 1 },
-          "kind": { "enum": ["rule", "threshold", "red_flag", "step"] }
+          "rule": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "rule",
+              "threshold",
+              "red_flag",
+              "step"
+            ]
+          }
         }
       }
     },
     "example": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["summary", "firsthand"],
+      "required": [
+        "summary",
+        "firsthand_evidence"
+      ],
       "properties": {
-        "summary": { "type": "string" },
-        "firsthand": { "type": "boolean", "description": "True if the mentor lived it, false if secondhand." }
+        "summary": {
+          "type": "string"
+        },
+        "firsthand_evidence": {
+          "enum": [
+            "stated_by_mentor",
+            "corroborated",
+            "unverified",
+            "not_firsthand"
+          ],
+          "description": "stated_by_mentor: the mentor says they lived it (not proof). corroborated: independent evidence supports it. unverified: not yet checked. not_firsthand: secondhand account."
+        },
+        "corroboration_ref": {
+          "type": "string",
+          "description": "Opaque reference to corroborating evidence held in secure storage."
+        }
       }
     },
     "boundaries": {
       "type": "array",
       "minItems": 1,
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "When this does not apply, and who should not follow it."
     },
     "escalation": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "when": { "type": "array", "items": { "type": "string" } },
-        "to": { "enum": ["mentor", "licensed_professional", "human_reviewer"] }
+        "when": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "to": {
+          "enum": [
+            "mentor",
+            "licensed_professional",
+            "human_reviewer"
+          ]
+        }
       }
     },
     "context": {
@@ -65,9 +143,21 @@
       "additionalProperties": false,
       "description": "Lets agents choose between conflicting mentors by situation instead of blending them.",
       "properties": {
-        "geography": { "type": "array", "items": { "type": "string" } },
-        "time_period": { "type": "string" },
-        "conditions": { "type": "array", "items": { "type": "string" } }
+        "geography": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "time_period": {
+          "type": "string"
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
     "regulated_domain": {
@@ -78,101 +168,515 @@
     "legal_review": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["state"],
+      "required": [
+        "state"
+      ],
       "properties": {
-        "state": { "enum": ["not_required", "pending", "cleared", "blocked"] },
-        "record_id": { "type": "string" }
+        "state": {
+          "enum": [
+            "not_required",
+            "pending",
+            "cleared",
+            "blocked"
+          ]
+        },
+        "record_id": {
+          "type": "string"
+        }
       }
     },
     "provenance": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["source_type", "source_id", "captured_at"],
+      "required": [
+        "source_type",
+        "source_id",
+        "captured_at"
+      ],
       "properties": {
-        "source_type": { "enum": ["interview", "founder_synthesis", "written_submission"] },
-        "source_id": { "type": "string", "description": "Opaque reference to access-controlled storage. Never the transcript itself." },
-        "source_location": { "type": "string", "description": "Timestamp or section in the source." },
-        "captured_at": { "type": "string", "format": "date" },
-        "drafted_by": { "type": "string", "description": "e.g. grace-beacon" }
+        "source_type": {
+          "enum": [
+            "interview",
+            "founder_synthesis",
+            "written_submission"
+          ]
+        },
+        "source_id": {
+          "type": "string",
+          "description": "Opaque reference to access-controlled storage. Never the transcript, and never transcript offsets."
+        },
+        "captured_at": {
+          "type": "string",
+          "format": "date"
+        },
+        "drafted_by": {
+          "type": "string",
+          "description": "e.g. grace-beacon"
+        }
       }
     },
     "consent": {
       "type": "object",
       "additionalProperties": false,
       "description": "Each scope is granted, declined or revoked separately.",
-      "required": ["record", "extract", "publish", "license", "name_likeness"],
+      "required": [
+        "record",
+        "extract",
+        "publish",
+        "license",
+        "name_likeness"
+      ],
       "properties": {
-        "record": { "$ref": "#/$defs/consentScope" },
-        "extract": { "$ref": "#/$defs/consentScope" },
-        "publish": { "$ref": "#/$defs/consentScope" },
-        "license": { "$ref": "#/$defs/consentScope" },
-        "name_likeness": { "$ref": "#/$defs/consentScope" }
+        "record": {
+          "$ref": "#/$defs/consentScope"
+        },
+        "extract": {
+          "$ref": "#/$defs/consentScope"
+        },
+        "publish": {
+          "$ref": "#/$defs/consentScope"
+        },
+        "license": {
+          "$ref": "#/$defs/consentScope"
+        },
+        "name_likeness": {
+          "$ref": "#/$defs/consentScope"
+        }
       }
     },
     "approval": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["state"],
+      "required": [
+        "state"
+      ],
       "properties": {
-        "state": { "enum": ["draft", "review_requested", "approved", "revised", "rejected", "revoked"] },
-        "approval_record_id": { "type": "string" },
-        "decided_by": { "const": "mentor", "description": "Only the mentor approves their own node." },
-        "decided_at": { "type": "string", "format": "date" },
-        "permitted_uses": { "type": "array", "items": { "enum": ["agent_retrieval", "pathfinder_lesson", "public_demo", "commercial_license"] } },
-        "expires_at": { "type": ["string", "null"], "format": "date" }
+        "state": {
+          "enum": [
+            "draft",
+            "review_requested",
+            "approved",
+            "revised",
+            "rejected",
+            "revoked"
+          ]
+        },
+        "approval_record_id": {
+          "type": "string"
+        },
+        "decided_by": {
+          "const": "mentor",
+          "description": "Only the mentor approves their own node."
+        },
+        "decided_at": {
+          "type": "string",
+          "format": "date"
+        },
+        "permitted_uses": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "agent_retrieval",
+              "pathfinder_lesson",
+              "public_demo",
+              "commercial_license"
+            ]
+          }
+        },
+        "expires_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        }
       }
     },
-    "publication_status": { "enum": ["private", "approved_unpublished", "published", "unpublished"] },
-    "lens": { "type": "string", "description": "One of the 10 learning lenses, e.g. knolling, schematic." },
-    "visual_spec": { "type": "string" },
+    "publication_status": {
+      "enum": [
+        "private",
+        "approved_unpublished",
+        "published",
+        "unpublished"
+      ]
+    },
+    "lens": {
+      "type": "string",
+      "description": "One of the 10 learning lenses, e.g. knolling, schematic."
+    },
+    "visual_spec": {
+      "type": "string"
+    },
     "quiz": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["question", "answer"],
-        "properties": { "question": { "type": "string" }, "answer": { "type": "string" } }
+        "required": [
+          "question",
+          "answer"
+        ],
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          }
+        }
       }
     },
-    "conflicting_node_ids": { "type": "array", "items": { "type": "string" }, "description": "Nodes that disagree with this one. Disagreement is kept, not averaged." }
+    "conflicting_node_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Nodes that disagree with this one. Disagreement is kept, not averaged."
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "claims"
+      ],
+      "description": "GROUNDING layer. Checked once per node version. Says whether the source supports what the node claims the mentor said; it does not judge whether the lesson is true for everyone.",
+      "properties": {
+        "state": {
+          "enum": [
+            "unchecked",
+            "in_review",
+            "complete"
+          ]
+        },
+        "checked_at": {
+          "type": "string",
+          "format": "date"
+        },
+        "method": {
+          "enum": [
+            "automated",
+            "human",
+            "automated_with_human_review"
+          ]
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/atomicClaim"
+          }
+        }
+      }
+    }
   },
   "$defs": {
     "consentScope": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["state"],
+      "required": [
+        "state"
+      ],
       "properties": {
-        "state": { "enum": ["granted", "declined", "revoked", "not_asked"] },
-        "record_id": { "type": "string" },
-        "at": { "type": "string", "format": "date" }
+        "state": {
+          "enum": [
+            "granted",
+            "declined",
+            "revoked",
+            "not_asked"
+          ]
+        },
+        "record_id": {
+          "type": "string"
+        },
+        "at": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "atomicClaim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_id",
+        "text",
+        "evidence_ref",
+        "status"
+      ],
+      "properties": {
+        "claim_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "description": "One small, checkable statement taken from the node."
+        },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Opaque pointer to the supporting span. Exact offsets live only in secure storage."
+        },
+        "status": {
+          "enum": [
+            "supported",
+            "partially_supported",
+            "unsupported",
+            "unchecked"
+          ]
+        },
+        "qualification": {
+          "type": "string",
+          "description": "How the claim must be limited when only partly supported."
+        },
+        "human_reviewed": {
+          "type": "boolean"
+        },
+        "returned_to_mentor": {
+          "type": "boolean",
+          "description": "Unsupported claims go back to the mentor; they are never silently deleted."
+        }
       }
     }
   },
   "allOf": [
     {
       "description": "Approved nodes need a mentor decision with a record.",
-      "if": { "properties": { "approval": { "properties": { "state": { "const": "approved" } } } } },
-      "then": { "properties": { "approval": { "required": ["approval_record_id", "decided_by", "decided_at", "permitted_uses"] } } }
+      "if": {
+        "properties": {
+          "approval": {
+            "properties": {
+              "state": {
+                "const": "approved"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "approval": {
+            "required": [
+              "approval_record_id",
+              "decided_by",
+              "decided_at",
+              "permitted_uses"
+            ]
+          }
+        }
+      }
     },
     {
       "description": "Published nodes must be approved and have publish consent granted.",
-      "if": { "properties": { "publication_status": { "const": "published" } } },
+      "if": {
+        "properties": {
+          "publication_status": {
+            "const": "published"
+          }
+        }
+      },
       "then": {
         "properties": {
-          "approval": { "properties": { "state": { "const": "approved" } } },
-          "consent": { "properties": { "publish": { "properties": { "state": { "const": "granted" } } } } }
+          "approval": {
+            "properties": {
+              "state": {
+                "const": "approved"
+              }
+            }
+          },
+          "consent": {
+            "properties": {
+              "publish": {
+                "properties": {
+                  "state": {
+                    "const": "granted"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
     {
       "description": "A display name requires name/likeness consent.",
-      "if": { "properties": { "mentor": { "required": ["display_name"], "properties": { "display_name": { "type": "string" } } } } },
-      "then": { "properties": { "consent": { "properties": { "name_likeness": { "properties": { "state": { "const": "granted" } } } } } } }
+      "if": {
+        "properties": {
+          "mentor": {
+            "required": [
+              "display_name"
+            ],
+            "properties": {
+              "display_name": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "consent": {
+            "properties": {
+              "name_likeness": {
+                "properties": {
+                  "state": {
+                    "const": "granted"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
     {
       "description": "Published regulated-domain nodes must be legally cleared.",
-      "if": { "properties": { "regulated_domain": { "const": true }, "publication_status": { "const": "published" } }, "required": ["regulated_domain"] },
-      "then": { "required": ["legal_review"], "properties": { "legal_review": { "properties": { "state": { "const": "cleared" } } } } }
+      "if": {
+        "properties": {
+          "regulated_domain": {
+            "const": true
+          },
+          "publication_status": {
+            "const": "published"
+          }
+        },
+        "required": [
+          "regulated_domain"
+        ]
+      },
+      "then": {
+        "required": [
+          "legal_review"
+        ],
+        "properties": {
+          "legal_review": {
+            "properties": {
+              "state": {
+                "const": "cleared"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "description": "RELEASE GATE: a node released to agents or published must be fully grounded. No unsupported or unchecked claims; partly supported claims need a written qualification and human review.",
+      "if": {
+        "anyOf": [
+          {
+            "properties": {
+              "publication_status": {
+                "const": "published"
+              }
+            },
+            "required": [
+              "publication_status"
+            ]
+          },
+          {
+            "properties": {
+              "approval": {
+                "properties": {
+                  "permitted_uses": {
+                    "contains": {
+                      "const": "agent_retrieval"
+                    }
+                  }
+                },
+                "required": [
+                  "permitted_uses"
+                ]
+              }
+            },
+            "required": [
+              "approval"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "properties": {
+          "verification": {
+            "properties": {
+              "state": {
+                "const": "complete"
+              },
+              "claims": {
+                "minItems": 1,
+                "items": {
+                  "allOf": [
+                    {
+                      "properties": {
+                        "status": {
+                          "enum": [
+                            "supported",
+                            "partially_supported"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "status": {
+                            "const": "partially_supported"
+                          }
+                        }
+                      },
+                      "then": {
+                        "required": [
+                          "qualification",
+                          "human_reviewed"
+                        ],
+                        "properties": {
+                          "qualification": {
+                            "minLength": 1
+                          },
+                          "human_reviewed": {
+                            "const": true
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "description": "A claim marked unsupported must be returned to the mentor.",
+      "properties": {
+        "verification": {
+          "properties": {
+            "claims": {
+              "items": {
+                "if": {
+                  "properties": {
+                    "status": {
+                      "const": "unsupported"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "returned_to_mentor"
+                  ],
+                  "properties": {
+                    "returned_to_mentor": {
+                      "const": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   ]
 }

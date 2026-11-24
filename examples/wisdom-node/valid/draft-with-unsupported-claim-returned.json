@@ -1,0 +1,97 @@
+{
+  "id": "example-0002",
+  "address": "example-farmer/1.10.1",
+  "version": "0.2.0",
+  "mentor": {
+    "mentor_id": "synthetic-mentor-001",
+    "display_name": null
+  },
+  "claim": "SYNTHETIC EXAMPLE: Never plant your whole field in one crop the season after a drought.",
+  "decision_rules": [
+    {
+      "rule": "Split planting across at least two crops with different water needs.",
+      "kind": "rule"
+    },
+    {
+      "rule": "If the forecast is uncertain, keep a quarter of the seed budget in reserve.",
+      "kind": "threshold"
+    }
+  ],
+  "example": {
+    "summary": "SYNTHETIC: A fictional farmer lost half a harvest by planting one crop after a dry year.",
+    "firsthand_evidence": "stated_by_mentor"
+  },
+  "boundaries": [
+    "Does not apply to irrigated land with reliable water.",
+    "Not financial advice."
+  ],
+  "escalation": {
+    "when": [
+      "The farm uses contract growing with a single buyer."
+    ],
+    "to": "mentor"
+  },
+  "context": {
+    "geography": [
+      "fictional"
+    ],
+    "time_period": "illustrative",
+    "conditions": [
+      "rain-fed",
+      "small plot"
+    ]
+  },
+  "regulated_domain": false,
+  "provenance": {
+    "source_type": "interview",
+    "source_id": "synthetic-src-001",
+    "captured_at": "2026-11-23",
+    "drafted_by": "example"
+  },
+  "consent": {
+    "record": {
+      "state": "granted",
+      "record_id": "synthetic-c1",
+      "at": "2026-11-23"
+    },
+    "extract": {
+      "state": "granted",
+      "record_id": "synthetic-c2",
+      "at": "2026-11-23"
+    },
+    "publish": {
+      "state": "granted",
+      "record_id": "synthetic-c3",
+      "at": "2026-11-23"
+    },
+    "license": {
+      "state": "declined"
+    },
+    "name_likeness": {
+      "state": "declined"
+    }
+  },
+  "verification": {
+    "state": "in_review",
+    "claims": [
+      {
+        "claim_id": "c1",
+        "text": "Every drought year is followed by a wet year.",
+        "evidence_ref": "synthetic-ev-003",
+        "status": "unsupported",
+        "returned_to_mentor": true
+      }
+    ]
+  },
+  "approval": {
+    "state": "review_requested"
+  },
+  "publication_status": "private",
+  "lens": "knolling",
+  "quiz": [
+    {
+      "question": "Why split planting after a drought?",
+      "answer": "To avoid losing everything if water stays short."
+    }
+  ]
+}

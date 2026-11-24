@@ -1,7 +1,7 @@
 {
   "id": "example-0001",
   "address": "example-farmer/1.10.1",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "mentor": {
     "mentor_id": "synthetic-mentor-001",
     "display_name": null
@@ -19,7 +19,7 @@
   ],
   "example": {
     "summary": "SYNTHETIC: A fictional farmer lost half a harvest by planting one crop after a dry year.",
-    "firsthand": true
+    "firsthand_evidence": "stated_by_mentor"
   },
   "boundaries": [
     "Does not apply to irrigated land with reliable water.",
@@ -43,8 +43,8 @@
   },
   "regulated_domain": false,
   "provenance": {
-    "source_type": "written_submission",
-    "source_id": "synthetic-source-001",
+    "source_type": "interview",
+    "source_id": "synthetic-src-001",
     "captured_at": "2026-11-23",
     "drafted_by": "example"
   },
@@ -71,9 +71,32 @@
       "state": "declined"
     }
   },
+  "verification": {
+    "state": "complete",
+    "checked_at": "2026-11-24",
+    "method": "automated_with_human_review",
+    "claims": [
+      {
+        "claim_id": "c1",
+        "text": "After a drought, planting a single crop risks losing the season.",
+        "evidence_ref": "synthetic-ev-001",
+        "status": "unsupported",
+        "returned_to_mentor": true
+      },
+      {
+        "claim_id": "c2",
+        "text": "Keeping a quarter of the seed budget in reserve is enough buffer.",
+        "evidence_ref": "synthetic-ev-002",
+        "status": "partially_supported",
+        "qualification": "The mentor named a quarter as their own practice, not a general rule; present it as one farmer's threshold.",
+        "human_reviewed": true
+      }
+    ]
+  },
   "approval": {
-    "state": "draft",
+    "state": "approved",
     "approval_record_id": "synthetic-a1",
+    "decided_by": "mentor",
     "decided_at": "2026-11-23",
     "permitted_uses": [
       "agent_retrieval",
