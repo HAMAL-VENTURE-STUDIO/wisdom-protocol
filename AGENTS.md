@@ -31,6 +31,8 @@ Do not rebuild what a Final HIP already covers. If nothing covers it, say so in 
 
 This repository follows the Interpretable Context Methodology (ICM): the folder structure *is* the agent architecture.
 
+ICM was created by Jake Van Clief and David McDermott ("Interpretable Context Methodology: Folder Structure as Agentic Architecture", arXiv:2603.16021, 2026), and is open source under the MIT license: https://github.com/RinDig/Interpretable-Context-Methodology-ICM. HAMAL applies ICM to its agents; credit the authors when describing it.
+
 - **Entry:** this `AGENTS.md` is the root. `CLAUDE.md` only points here.
 - **Three primitives:** *sequence* (numbered folders, e.g. `01_inputs/`, run in order, each step's output is the next step's input), *shelf* (unnumbered folders of same-shaped files, e.g. `templates/`), and *catalog* (short index files such as `INDEX.md` that point into folders so agents load only what they need).
 - **Every file is one of:** Catalog, Contract (schemas, rules), Factory (prompts, scripts that transform inputs), Product (finished outputs), or Dead (prune or archive it).
